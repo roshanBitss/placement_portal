@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Page</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=account_circle" />
+    <script src="{% static 'canvasjs.min.js' %}"></script>
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/test.css' %}">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-danger" data-bs-theme="dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'images/VSIT_Logo.png' %}" alt="Logo" width="30" height="24">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'job' %}">Job</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'event' %}">Event</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url 'test' %}">Quiz</a>
+              </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                </li>
+            </ul>
+            <form class="d-flex" role="search">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <!-- SVG Icon -->
+                    <a href="#" style="text-decoration: none; display: flex; align-items: center; color: white; gap: 10px;">
+                      <!-- If profile and photo exist, display user's profile image -->
+                      {% if profile and profile.image %}
+                          <img src="{{ profile.image.url }}" alt="Profile Photo" style="width: 48px; height: 48px; border-radius: 50%;">
+                      {% else %}
+                          <!-- Default SVG Icon -->
+                          <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#fff">
+                              <path d="M222-255q63-44 125-67.5T480-346q71 0 133.5 23.5T739-255q44-54 62.5-109T820-480q0-145-97.5-242.5T480-820q-145 0-242.5 97.5T140-480q0 61 19 116t63 109Zm257.81-195q-57.81 0-97.31-39.69-39.5-39.68-39.5-97.5 0-57.81 39.69-97.31 39.68-39.5 97.5-39.5 57.81 0 97.31 39.69 39.5 39.68 39.5 97.5 0 57.81-39.69 97.31-39.68 39.5-97.5 39.5Zm.66 370Q398-80 325-111.5t-127.5-86q-54.5-54.5-86-127.27Q80-397.53 80-480.27 80-563 111.5-635.5q31.5-72.5 86-127t127.27-86q72.76-31.5 155.5-31.5 82.73 0 155.23 31.5 72.5 31.5 127 86t86 127.03q31.5 72.53 31.5 155T848.5-325q-31.5 73-86 127.5t-127.03 86Q562.94-80 480.47-80Zm-.47-60q55 0 107.5-16T691-212q-51-36-104-55t-107-19q-54 0-107 19t-104 55q51 40 103.5 56T480-140Zm0-370q34 0 55.5-21.5T557-587q0-34-21.5-55.5T480-664q-34 0-55.5 21.5T403-587q0 34 21.5 55.5T480-510Zm0-77Zm0 374Z"/>
+                          </svg>
+                      {% endif %}
+                        <!-- Login Text -->
+                  <a href="{% url 'logout'%}" onclick="confirmLogout(event)" style="text-decoration:none;color:white;">Logout</a>
+
+                  <script>
+                      function confirmLogout(event) {
+                          event.preventDefault();  // Prevent the default action (redirect)
+                          
+                          // Show a confirmation dialog
+                          if (confirm("Are you sure you want to log out?")) {
+                              // If 'Yes' is clicked, redirect to the logout URL
+                              window.location.href = "{% url 'logout' %}";
+                          } else {
+                              // If 'No' is clicked, do nothing (stay on the current page)
+                              return false;
+                          }
+                      }
+                  </script>
+                                          </a>
+                </div>                      
+                </form>
+        </div>
+    </div>
+</nav>
+<div class="col text-center mt-3 mb-0">
+    <h3>Arithmetic Aptitude</h3>
+</div>
+<div class="container mt-4">
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <div class="profile-card">
+                            <img src="{% static 'images/profit loss.jpeg' %}" class="profile-img" alt="Profile 1">
+                            <h5>Profit & Loss</h5>
+                            <p>💰 "Life is like a discount sale, always check the hidden costs!"<br>
+                                💸 "Profit or loss? Well, that depends on your bargaining skills!"<br>
+                                😂 "If math was a shopkeeper, we’d all be broke!"</p>
+                                <a href="{% url 'question_set' profile.username 'ProfitAndLoss' %}" class="btn btn-outline-danger">Play Now!</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="profile-card">
+                            <img src="{% static 'images/Percentage.jpeg' %}" class="profile-img" alt="Profile 2">
+                            <h5>Percentage</h5>
+                            <p>📊 "Math teachers love percentages… because they are always 100% correct!"<br>
+                                🧠 "Scored 40% in exams? Don’t worry, that’s still better than 0%!"<br>
+                                😆 "In life and in math, everything is about percentages—except pizza, we want that 100%!"</p>
+                                <a href="{% url 'question_set' profile.username 'Percentage' %}" class="btn btn-outline-danger">Play Now!</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="profile-card">
+                            <img src="{% static 'images/pc.png' %}" class="profile-img" alt="Profile 3">
+                            <h5>Permutation & Combination</h5>
+                            <p>🎲 "Life is all about choices… just like permutation and combination!"<br>
+                                🤔 "If Plan A fails, don’t worry! There are 25 more letters in the alphabet!"<br>
+                                🃏 "I tried calculating my life choices using permutations… still got zero results!"</p>
+                                <a href="{% url 'question_set' profile.username 'PermutationAndCombination' %}" class="btn btn-outline-danger">Play Now!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<div class="col text-center mt-3 mb-0">
+    <h3>Data Interpretation Aptitude</h3>
+</div>
+
+<div class="container mt-4">
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <div class="profile-card">
+                            <img src="{% static 'images/table_chart.jpg' %}" class="profile-img" alt="Profile 1">
+                            <h5>Table Chart</h5>
+                            <p>📋 "Table charts: Where data sits neatly in rows and columns, just like a well-organized desk!"<br>
+                                📝 "Tables: The only place where all the data gets in line!"<br>
+                                📊 "Table charts: For when you need your data straight and tidy, like a perfectly arranged bookshelf!"</p>
+                                <a href="{% url 'question_set' profile.username 'TableChart' %}" class="btn btn-outline-danger">Play Now!</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="profile-card">
+                            <img src="{% static 'images/bar_graph.jpg' %}" class="profile-img" alt="Profile 2">
+                            <h5>Bar Chart</h5>
+                            <p>📊 "Reading bar charts is like decoding secret messages – except they're all about numbers!"<br>
+                                😆 "A bar chart is like a popularity contest for numbers – the taller, the better!"<br>
+                                📈 "If bars were candy bars, we'd all love statistics more!"</p>
+                                <a href="{% url 'question_set' profile.username 'BarGraph' %}" class="btn btn-outline-danger">Play Now!</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="profile-card">
+                            <img src="{% static 'images/pie_graph.jpg' %}" class="profile-img" alt="Profile 3">
+                            <h5>Pie Chart</h5>
+                            <p>🥧 "Pie charts: The only place where math makes you crave dessert!"<br>
+                                😂 "Pie charts show data in slices – just like how we divide pizza at a party!"<br>
+                                📊 "If decisions were based on pie charts, I'd always pick the biggest slice!"</p>
+                                <a href="{% url 'question_set' profile.username 'PieChart' %}" class="btn btn-outline-danger">Play Now!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col text-center mt-3 mb-0">
+                <h3>Programming</h3>
+            </div>
+            
+            <div class="container mt-4">
+                            <div class="row justify-content-center">
+                                <div class="col-md-4">
+                                    <div class="profile-card">
+                                        <img src="{% static 'images/c++.avif' %}" class="profile-img" alt="Profile 1">
+                                        <h5>C++</h5>
+                                        <p>⚙️ "C++: Where ‘+’ means more complexity and more power!"<br>
+                                            💡 "Pointers are like a treasure map – only experts know where X marks the spot!"<br>
+                                            😂 "If debugging is the process of removing bugs, then programming must be the process of putting them in!"</p>
+                                            <a href="{% url 'question_set' profile.username 'CPlusPlus' %}" class="btn btn-outline-danger">Play Now!</a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="profile-card">
+                                        <img src="{% static 'images/python.webp' %}" class="profile-img" alt="Profile 2">
+                                        <h5>Python</h5>
+                                        <p>🐍 "Python: The only snake that programmers actually love!"<br>
+                                            🧠 "Indentation matters! One wrong space, and boom – an error!"<br>
+                                            😂 "Python developers don’t use semicolons; they’re allergic to them!"</p>
+                                            <a href="{% url 'question_set' profile.username 'Python' %}" class="btn btn-outline-danger">Play Now!</a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="profile-card">
+                                        <img src="{% static 'images/Java.png' %}" class="profile-img" alt="Profile 3">
+                                        <h5>Java</h5>
+                                        <p>☕ "Java: Where coffee and code go hand in hand!"<br>
+                                            🖥️ "Write once, debug everywhere!"<br>
+                                            😂 "Java is like a vending machine – press a button and wait for the result!"</p>
+                                            <a href="{% url 'question_set' profile.username 'Java' %}" class="btn btn-outline-danger">Play Now!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<!--footer-->
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top ">
+    <div class="col-md-4 d-flex align-items-center">
+      <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+      </a>
+      <span class="mb-3 mb-md-0 text-muted" style="font-weight: normal;">© 2025 All Rights Reserved By Vidyalankar School of Information Technology <br>Terms & Conditions<br>Privacy Policy</span>
+    </div>
+
+    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+      <li class="ms-3"><a class="text-muted" href="#"></a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+        <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
+      </svg></li>
+      <li class="ms-3"><a class="text-muted" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+        <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
+      </svg></use></svg></a></li>
+      <li class="ms-3"><a class="text-muted" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+        <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
+      </svg></use></svg></a></li>
+      <li class="ms-3"><a class="text-muted" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
+        <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
+      </svg>
+    </ul>
+  </footer>
+</div>     
+
+<!-- Bootstrap JS (Ensure Bootstrap 5 is included) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

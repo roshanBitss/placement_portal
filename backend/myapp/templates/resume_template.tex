@@ -1,0 +1,31 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\begin{document}
+\begin{center}
+    {\huge \textbf{{ name }}}\\
+    \vspace{5pt}
+    \texttt{{ email }} \hspace{10pt} | \hspace{10pt} \texttt{{ phone }} \\
+    \texttt{\href{mailto:{{ email }}}{Email}} \hspace{10pt} | \hspace{10pt} \texttt{\href{https://{{ linkedin }}}{LinkedIn}}\\
+\end{center}
+
+\section*{Experience}
+{% for job in experience %}
+\textbf{{ job.position }} \hfill {{ job.company }} \\
+\textit{{ job.dates }} \\
+{{ job.description }} \\
+
+{% endfor %}
+
+\section*{Education}
+\textbf{{ education.degree }} - {{ education.school }} \hfill {{ education.year }} \\
+
+\section*{Skills}
+\begin{itemize}
+    {% for skill in skills %}
+    \item {{ skill }}
+    {% endfor %}
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,400 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=account_circle" />
+    <script src="{% static 'canvasjs.min.js' %}"></script>
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-danger" data-bs-theme="dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'images/VSIT_Logo.png' %}" alt="Logo" width="30" height="24">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'job' %}">Job</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'event' %}">Event</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'test' %}">Quiz</a>
+                  </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <!-- SVG Icon -->
+                        <a href="#" style="text-decoration: none; display: flex; align-items: center; color: white; gap: 10px;">
+                          <!-- If profile and photo exist, display user's profile image -->
+                          {% if profile and profile.image %}
+                              <img src="{{ profile.image.url }}" alt="Profile Photo" style="width: 48px; height: 48px; border-radius: 50%;">
+                          {% else %}
+                              <!-- Default SVG Icon -->
+                              <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#fff">
+                                  <path d="M222-255q63-44 125-67.5T480-346q71 0 133.5 23.5T739-255q44-54 62.5-109T820-480q0-145-97.5-242.5T480-820q-145 0-242.5 97.5T140-480q0 61 19 116t63 109Zm257.81-195q-57.81 0-97.31-39.69-39.5-39.68-39.5-97.5 0-57.81 39.69-97.31 39.68-39.5 97.5-39.5 57.81 0 97.31 39.69 39.5 39.68 39.5 97.5 0 57.81-39.69 97.31-39.68 39.5-97.5 39.5Zm.66 370Q398-80 325-111.5t-127.5-86q-54.5-54.5-86-127.27Q80-397.53 80-480.27 80-563 111.5-635.5q31.5-72.5 86-127t127.27-86q72.76-31.5 155.5-31.5 82.73 0 155.23 31.5 72.5 31.5 127 86t86 127.03q31.5 72.53 31.5 155T848.5-325q-31.5 73-86 127.5t-127.03 86Q562.94-80 480.47-80Zm-.47-60q55 0 107.5-16T691-212q-51-36-104-55t-107-19q-54 0-107 19t-104 55q51 40 103.5 56T480-140Zm0-370q34 0 55.5-21.5T557-587q0-34-21.5-55.5T480-664q-34 0-55.5 21.5T403-587q0 34 21.5 55.5T480-510Zm0-77Zm0 374Z"/>
+                              </svg>
+                          {% endif %}
+                            <!-- Login Text -->
+                      <a href="{% url 'logout'%}" onclick="confirmLogout(event)" style="text-decoration:none;color:white;">Logout</a>
+
+                      <script>
+                          function confirmLogout(event) {
+                              event.preventDefault();  // Prevent the default action (redirect)
+                              
+                              // Show a confirmation dialog
+                              if (confirm("Are you sure you want to log out?")) {
+                                  // If 'Yes' is clicked, redirect to the logout URL
+                                  window.location.href = "{% url 'logout' %}";
+                              } else {
+                                  // If 'No' is clicked, do nothing (stay on the current page)
+                                  return false;
+                              }
+                          }
+                      </script>
+                                              </a>
+                    </div>                      
+                    </form>
+            </div>
+        </div>
+    </nav>
+<!--jumbotron-->
+<div class="jumbotron">
+  {% if profile %}
+    <h1 class="display-4"><b>Hello, {{ profile.name }}</b></h1>
+{% else %}
+    <h1 class="display-4"><b>Profile not found!</b></h1>
+{% endif %}
+    
+    <p class="lead"><b>Welcome to the College Placement Portal
+        Find your dream job and connect with top employers</p>
+    <hr class="my-4">
+   <!-- <a class="btn btn-danger btn-lg" href="#" role="button">Learn more</a>-->
+</div>
+<div class="col text-center mt-3 mb-0">
+  <h3 style="color:red;">Placement Heads</h3>
+</div>
+<!--Row 1-->
+<div class="row row-cols-1 row-cols-md-3 g-4 mt-0">
+  <div class="col">
+    <div class="card w-76 mx-auto p-8">
+      <img src="{% static 'images/IMG_8201(1).png' %}" class="card-img-top img-fluid w-50 mx-auto" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Roshan Bitlingu</h5>
+        <p class="card-text">
+          Email Id: dinesh.sukumaran@vsit.edu.in<br>
+          Placement Cell: X101<br>
+          Office Timings: 9.00am to 5.00pm<br>
+          Contact Number: 022-24104244 (Extn: 3103)<br>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card w-76 mx-auto p-8">
+      <img src="{% static 'images/snehal_tandale.png' %}" class="card-img-top img-fluid w-50 mx-auto" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Snehal Tandale</h5>
+        <p class="card-text">
+          Email Id: snehal.tandale@vsit.edu.in<br>
+          Placement Cell: X101<br>
+          Office Timings: 9.00am to 5.00pm<br>
+          Contact Number: 022-24104244 (Extn: 3103)<br>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card w-76 mx-auto p-8">
+      <img src="{% static 'images/Shobha_Nalawade.png' %}" class="card-img-top img-fluid w-50 mx-auto" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Spruha More</h5>
+        <p class="card-text">
+          Email Id: spruha.more@vsit.edu.in<br>
+          Placement Cell: X101<br>
+          Office Timings: 9.00am to 5.00pm<br>
+          Contact Number: 022-24104244 (Extn: 3103)<br>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Row 2 -->
+<div class="col text-center mt-3">
+  <h3 style="color:red;">Student Coordinators</h3>
+</div>
+<div class="row row-cols-1 row-cols-md-3 g-4 ">
+  <div class="col">
+    <div class="card w-76 mx-auto p-8">
+      <img src="{% static 'images/Kalyani.png' %}" class="card-img-top img-fluid w-50 mx-auto" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Kalyani Gunjal</h5>
+        <p class="card-text">
+          Email Id: kalyani.gunjal@vsit.edu.in<br>
+          Contact Number: 90824 54754<br>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card w-76 mx-auto p-8">
+      <img src="{% static 'images/IMG_8208(1).jpg' %}" class="card-img-top img-fluid w-50 mx-auto" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Rahul Sapa</h5>
+        <p class="card-text">
+          Email Id: rahul.sapa@vsit.edu.in<br>
+          Contact Number: 96197 11396<br>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card w-76 mx-auto p-8">
+      <img src="{% static 'images/Rakshita.jpg' %}" class="card-img-top img-fluid w-50 mx-auto" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Rakshita Boga</h5>
+        <p class="card-text">
+          Email Id: rakshita.boga@vsit.edu.in<br>
+          Contact Number: 93241 36575<br>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!--Placement charts--> 
+  <div class="col text-center mt-3">
+    <h3 style="color:red;">Stats of Placements</h3><br>
+</div> 
+  <!--barchart and piechart-->
+  <div class="container mt-4">
+    <div class="row">
+        <!-- Fruit Consumption Chart -->
+        <div class="col-md-6">
+            <div id="chartContainerFruits" style="width: 100%; height: 300px;"></div>
+        </div>
+        
+        <!-- Sales Channels Chart -->
+        <div class="col-md-6">
+            <div id="chartContainerSales" style="width: 100%; height: 300px;"></div>
+        </div>
+    </div>
+</div>
+<script>
+  window.onload = function() {
+      // Fruit Consumption Chart
+      var chartFruits = new CanvasJS.Chart("chartContainerFruits", {
+          animationEnabled: true,
+          title: {
+              text: "Package Per Year In Lakhs"
+          },
+          data: [{
+              type: "column", // Change to your preferred chart type
+              dataPoints: {{ data_points_fruits|safe }}
+          }]
+      });
+      chartFruits.render();
+
+      // Sales Channels Chart
+      var chartSales = new CanvasJS.Chart("chartContainerSales", {
+          animationEnabled: true,
+          title: {
+              text: "Students Got Placed With Respect To Department"
+          },
+          data: [{
+              type: "pie", // Change to your preferred chart type
+              dataPoints: {{ data_points_sales|safe }}
+          }]
+      });
+      chartSales.render();
+  };
+</script>
+<!--highlights-->
+<div class="container-fluid highlights-section text-center">
+  <h3 class="mb-4">Highlights</h3>
+  <div class="container">
+      <div class="row g-4">
+          <div class="col-md-3">
+              <div class="highlight-box border border-danger">
+                  <div class="highlight-number">40</div>
+                  <div class="highlight-text">Schools Visiting</div>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="highlight-box border border-danger">
+                  <div class="highlight-number">₹ 9.60 Lakhs</div>
+                  <div class="highlight-text">Highest package</div>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="highlight-box border border-danger">
+                  <div class="highlight-number">₹ 3 Lakhs</div>
+                  <div class="highlight-text">Average package</div>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="highlight-box border border-danger">
+                  <div class="highlight-number">60+</div>
+                  <div class="highlight-text">Placement Offers</div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!--footer-->
+<hr>
+<div class="container py-5">
+  <h3 class="text-center mb-4" style="color:red;">Recruitment Process</h3>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="col">
+          <div class="step-box">
+              <div class="step-number">01</div>
+              <img src="https://img.icons8.com/ios/50/goal--v1.png" class="step-icon" alt="Target">
+              <div class="step-text">Communicating about job fair to our industry partners.</div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="step-box">
+              <div class="step-number">02</div>
+              <img src="https://img.icons8.com/ios-filled/50/000000/search.png" class="step-icon" alt="Search">
+              <div class="step-text">Inviting applications from interested students.</div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="step-box">
+              <div class="step-number">03</div>
+              <img src="https://img.icons8.com/ios-filled/50/000000/conference.png" class="step-icon" alt="Meeting">
+              <div class="step-text">Pre-placement talk.</div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="step-box">
+              <div class="step-number">04</div>
+              <img src="https://img.icons8.com/ios-filled/50/000000/training.png" class="step-icon" alt="Interview">
+              <div class="step-text">First round: General Interview.</div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="step-box">
+              <div class="step-number">05</div>
+              <img src="https://img.icons8.com/ios-filled/50/000000/document.png" class="step-icon" alt="Feedback">
+              <div class="step-text">Feedback of first round.</div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="step-box">
+              <div class="step-number">06</div>
+              <img src="https://img.icons8.com/ios-filled/50/000000/checklist.png" class="step-icon" alt="Checklist">
+              <div class="step-text">Second round: Demo lesson at school/college.</div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="step-box">
+              <div class="step-number">07</div>
+              <img src="https://img.icons8.com/ios-filled/50/000000/document.png" class="step-icon" alt="Feedback">
+              <div class="step-text">Feedback of second round.</div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="step-box">
+              <div class="step-number">08</div>
+              <img src="https://img.icons8.com/ios-filled/50/000000/handshake.png" class="step-icon" alt="Handshake">
+              <div class="step-text">Final round – Meeting with the Director.</div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="step-box">
+              <div class="step-number">09</div>
+              <img src="https://img.icons8.com/ios-filled/50/000000/task-completed.png" class="step-icon" alt="Result">
+              <div class="step-text">Result declaration.</div>
+          </div>
+      </div>
+  </div>
+</div>
+<!--industry partners-->
+<div class="container py-4">
+  <h3 class="text-center" style="color:red;">Industry Partners</h3><br>
+  <p style="text-align:center; color: #545454;" >Our students benefit from workplace experience, internships, sponsorships, guest lectures and <br> industry insights giving them a significant advantage and foot in the door of their chosen<br> career.</p>
+</div>
+<div id="schoolCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <!-- School Cards -->
+    <div class="carousel-item active">
+      <div class="row">
+        <div class="col-md-3 col-sm-6">
+          <div class="card">
+            <img src="{% static 'images/infosys.png' %}" alt="School Logo">
+            <p style="text-align:center;">Infosys</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card">
+            <img src="{% static 'images/tescom.png' %}" alt="School Logo">
+            <p style="text-align:center;">Tescom Solutions</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card">
+            <img src="{% static 'images/silverlink.png' %}" alt="School Logo">
+            <p style="text-align:center;">Silverlink Technologies</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card">
+            <img src="{% static 'images/simkraft.png' %}" alt="School Logo">
+            <p style="text-align:center;">Simkraft Technologies</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+</div>
+
+<!--footer-->
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top ">
+      <div class="col-md-4 d-flex align-items-center">
+        <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+          <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+        </a>
+        <span class="mb-3 mb-md-0 text-muted" style="font-weight: normal;">© 2025 All Rights Reserved By Vidyalankar School of Information Technology <br>Terms & Conditions<br>Privacy Policy</span>
+      </div>
+  
+      <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+        <li class="ms-3"><a class="text-muted" href="#"></a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+          <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
+        </svg></li>
+        <li class="ms-3"><a class="text-muted" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+          <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
+        </svg></use></svg></a></li>
+        <li class="ms-3"><a class="text-muted" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+          <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
+        </svg></use></svg></a></li>
+        <li class="ms-3"><a class="text-muted" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
+          <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
+        </svg>
+      </ul>
+    </footer>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

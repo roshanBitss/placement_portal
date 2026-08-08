@@ -1,0 +1,160 @@
+
+.navbar-brand img {
+    width: 200px; /* Adjust the width as needed */
+    height: auto; /* Maintain aspect ratio */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+    max-width: 100%;
+    height: auto;
+  
+}
+
+.jumbotron {
+    text-align: center; /* Center the text */
+    background: url('/static/images/home_banner.jpeg') no-repeat center center; /* Add background image */
+    background-size: cover; /* Cover the entire container */
+    color: #545454; /* White text for better contrast */
+    padding: 5rem 1rem; /* Add some padding */
+    font-weight: bold;
+    padding-bottom: 15px;
+}
+
+.jumbotron .btn {
+    margin-top: 1rem; /* Add space above the button */
+    
+}
+
+.lead {
+    color: black;
+}
+
+.navbar-nav {
+    margin: 0 auto; /* Center the navigation links */
+}
+
+.nav-item {
+    margin: 0 15px; /* Add spacing between the links */
+}
+
+.material-symbols-outlined {
+    font-size: 500px; /* Increase the size of the icon */
+    color:black; /* Set the color of the icon to white */
+}
+
+
+
+.card-title {
+    text-align: center;
+}
+
+body {
+    margin-top: 0; /* Ensure no default margin from the body */
+    padding: 0;
+
+  }
+  h3 {
+    margin-top: 0; /* Remove top margin from headings */
+  }
+  .remove-top-space {
+    margin-top: 0 !important; /* Remove top margin */
+  }
+
+.card {
+  margin:5px;
+}
+
+.row{
+  margin:15px;
+  margin-top: 3px;
+}
+
+.img-fluid {
+  object-fit: cover;
+}
+.card-text {
+  font-weight: normal;
+}
+
+.highlights-section {
+  background-color: white;
+  color: red;
+  padding: 50px 0;
+}
+.highlight-box {
+  background: white;
+  color: black;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+.highlight-number {
+  font-size: 30px;
+  font-weight: bold;
+}
+.highlight-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: gray;
+}
+
+.step-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+.step-number {
+  font-size: 30px;
+  font-weight: bold;
+  color: #6c757d;
+  background: #e9ecef;
+  padding: 10px;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-icon {
+  width: 50px;
+  height: 50px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  margin: 10px;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+}
+
+.card p {
+  padding: 10px;
+  font-weight: bold;
+}
+
+/* To make the scrolling effect smoother */
+.carousel-inner {
+  display: flex;
+  gap: 16px;
+}
+
+.carousel-item {
+  display: flex;
+  flex: 0 0 auto;
+}

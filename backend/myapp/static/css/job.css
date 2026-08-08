@@ -1,0 +1,9 @@
+.card {
+    justify-self: center;
+    margin-right: 5px;
+    
+}
+
+.container-fluid {
+    align-items: end;
+}

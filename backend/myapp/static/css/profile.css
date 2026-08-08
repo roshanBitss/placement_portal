@@ -1,0 +1,65 @@
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+  }
+
+  .rounded-container {
+    border-radius: 20px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .profile-img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 15px;
+  }
+
+  .section-title {
+    background-color: #d32f2f;
+    padding: 5px 15px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #ffff;
+  }
+
+  .textfield {
+    border: none;
+    background-color: #f8f9fa;
+    font-weight: bold;
+  }
+
+  .navbar-brand img {
+    width: 200px; /* Adjust the width as needed */
+    height: auto; /* Maintain aspect ratio */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+    max-width: 100%;
+    height: auto;
+  
+  }
+  
+  
+  .navbar-nav {
+    margin: 0 auto; /* Center the navigation links */
+  }
+  
+  .nav-item {
+    margin: 0 15px; /* Add spacing between the links */
+  }
+
+  @media (max-width: 768px) {
+    .rounded-container {
+      padding: 15px; /* Adds padding for smaller screens */
+      margin-top: 10px; /* Creates space between elements */
+    }
+  
+
+  

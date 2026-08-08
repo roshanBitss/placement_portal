@@ -1,0 +1,246 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/question.css' %}">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg bg-danger navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/VSIT_Logo.png' %}" alt="Logo" width="40" height="30">
+        </a>
+        <span class="navbar-text text-white">Quiz Time! 🚀</span>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h3 class="text-center">Welcome, {{ profile.name }}!</h3>
+    <h5 class="text-center">Quiz Type: {{ quiz_type }}</h5>
+    <div class="text-center mt-3" id="score-container">
+        <h4>Current Score: <span id="score-display">0</span></h4><br>
+        
+    </div>
+    <a class="nav-link text-primary mt-3" href="{% url 'test' %}" style:"text-align:center;"><u>Back to Quiz Section</u></a><br>
+    <div class="card" id="quiz-container">
+        <div class="card-header text-center">
+            <h4>Question <span id="question-number">1</span></h4>
+        </div>
+        <div class="card-body">
+            <form id="quiz-form">
+                <input type="hidden" name="question_id" id="question-id">
+    
+                <h5 id="question-text"></h5>
+    
+                <div id="options-container"></div>
+    
+                <div class="text-center mt-3">
+                    <p id="feedback"></p>
+                </div>
+    
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-outline-secondary" id="prev-btn" disabled>Previous</button>
+                    <button type="button" class="btn btn-outline-success" id="submit-btn">Submit</button>
+                    <button type="button" class="btn btn-outline-primary d-none" id="next-btn">Next</button>
+                </div>
+            </form>
+    
+    
+            
+        </div>
+    </div>
+    
+    <!-- Final Score Display -->
+    <div class="text-center mt-3" id="final-score-container" style="display: none;">
+        <h4>🎉 Quiz Completed! 🎉</h4>
+        <p>Your total score: <strong id="final-score">0</strong></p>
+    </div>
+    
+    <!-- Debugging Area (For Error Messages) -->
+    <p id="debug" style="color:red; display: none;"></p>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let currentQuestionIndex = 0;
+            let totalScore = 0;
+            let questions = [];
+            let username = "{{ username }}";
+            let quizType = "{{ quiz_type }}";
+        
+            console.log("User:", username, "Quiz Type:", quizType);
+        
+            // HTML elements
+            const questionText = document.getElementById("question-text");
+            const optionsContainer = document.getElementById("options-container");
+            const questionNumber = document.getElementById("question-number");
+            const scoreDisplay = document.getElementById("score-display");
+            const feedback = document.getElementById("feedback");
+            const submitBtn = document.getElementById("submit-btn");
+            const nextBtn = document.getElementById("next-btn");
+            const prevBtn = document.getElementById("prev-btn");
+            const quizContainer = document.getElementById("quiz-container"); // Ensure this exists
+            const finalScoreContainer = document.getElementById("final-score-container");
+            const finalScore = document.getElementById("final-score");
+        
+            // 🔹 Fetch Questions from Backend
+            async function fetchQuestions() {
+                try {
+                    console.log("Fetching questions for:", username, quizType);
+        
+                    const response = await fetch(`/question_set/${username}/${quizType}/`, {
+                        headers: { "X-Requested-With": "XMLHttpRequest" }  // AJAX header
+                    });
+        
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+        
+                    const data = await response.json();
+                    questions = data.questions;
+        
+                    console.log("Fetched Questions:", questions);
+        
+                    if (questions.length > 0) {
+                        displayQuestion(currentQuestionIndex);
+                    } else {
+                        alert("No questions available for this quiz.");
+                    }
+                } catch (error) {
+                    console.error("Error fetching questions:", error);
+                }
+            }
+        
+            // 🔹 Display a Question
+            function displayQuestion(index) {
+                const question = questions[index];
+        
+                if (!question) return;
+        
+                questionNumber.textContent = `Question ${index + 1} of ${questions.length}`;
+                questionText.textContent = question.question_text;
+                optionsContainer.innerHTML = ""; // Clear previous options
+        
+                // Dynamically create options
+                question.options.forEach((option, i) => {
+                    const optionKey = String.fromCharCode(97 + i);  // Convert 0 -> 'a', 1 -> 'b' ...
+                    const optionElement = document.createElement("div");
+                    optionElement.classList.add("form-check");
+                    optionElement.innerHTML = `
+                        <input class="form-check-input" type="radio" name="answer" id="option-${optionKey}" value="${optionKey}">
+                        <label class="form-check-label" for="option-${optionKey}">${option}</label>
+                    `;
+                    optionsContainer.appendChild(optionElement);
+                });
+        
+                prevBtn.disabled = index === 0;
+                nextBtn.classList.add("d-none");
+                submitBtn.classList.remove("d-none");
+                feedback.textContent = "";
+            }
+        
+            // 🔹 Submit Answer
+            async function submitAnswer() {
+                const selectedOption = document.querySelector('input[name="answer"]:checked');
+        
+                if (!selectedOption) {
+                    feedback.textContent = "Please select an answer!";
+                    feedback.style.color = "red";
+                    return;
+                }
+        
+                const questionId = questions[currentQuestionIndex].id;
+                const selectedAnswer = selectedOption.value;
+        
+                console.log("Submitting Answer:", { question_id: questionId, selected_answer: selectedAnswer });
+        
+                try {
+                    const response = await fetch(`/question_set/${username}/${quizType}/`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            question_id: questionId,
+                            selected_answer: selectedAnswer,
+                        }),
+                    });
+        
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+        
+                    const result = await response.json();
+                    console.log("Response from Server:", result);
+        
+                    if (result.error) {
+                        feedback.textContent = result.error;
+                        feedback.style.color = "red";
+                        return;
+                    }
+        
+                    if (result.is_correct) {
+                        feedback.textContent = "✅ Correct!";
+                        feedback.style.color = "green";
+                        totalScore += 1;
+                    } else {
+                        feedback.textContent = `❌ Incorrect! The correct answer is: ${result.correct_answer}`;
+                        feedback.style.color = "red";
+                    }
+        
+                    scoreDisplay.textContent = `Score: ${totalScore}`;
+                    submitBtn.classList.add("d-none");
+        
+                    // 🛑 If this is the last question, show final score
+                    if (currentQuestionIndex === questions.length - 1) {
+                        console.log("Last question reached. Displaying final score...");
+                        setTimeout(() => {
+                            quizContainer.classList.add("d-none");  // Hide quiz
+                            finalScoreContainer.classList.remove("d-none");  // Show final score
+                            finalScore.textContent = `Final Score: ${totalScore} / ${questions.length}`;
+                        }, 1000);  // 1-second delay for better UX
+                    } else {
+                        nextBtn.classList.remove("d-none");
+                    }
+        
+                } catch (error) {
+                    console.error("Error submitting answer:", error);
+                    feedback.textContent = "An error occurred while submitting your answer.";
+                    feedback.style.color = "red";
+                }
+            }
+        
+            // 🔹 Go to Next Question
+            function nextQuestion() {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    displayQuestion(currentQuestionIndex);
+                }
+            }
+        
+            // 🔹 Go to Previous Question
+            function prevQuestion() {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    displayQuestion(currentQuestionIndex);
+                }
+            }
+        
+            // Event Listeners
+            submitBtn.addEventListener("click", submitAnswer);
+            nextBtn.addEventListener("click", nextQuestion);
+            prevBtn.addEventListener("click", prevQuestion);
+        
+            // Fetch questions when page loads
+            fetchQuestions();
+        });
+        
+        
+        </script>
+        
+        <!-- Bootstrap JS (Ensure Bootstrap 5 is included) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
